@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8280
 spring:
   application:
     name: ToDos
@@ -13,13 +13,28 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-
+  security:
+    oauth2:
+      client:
+        registration:
+          todos:
+            provider: keycloak
+            client-id: ${SSO_RESOURCE:todos} 
+            client-secret: ${SSO_SECRET:b6ca1716-43a7-42a6-ab04-26aa5a853ae1}
+            authorization-grant-type: client_credentials
+        provider:
+          keycloak:
+            authorization-uri: ${SSO_AUTH_SERVER:http://localhost:8585/auth}/realms/${SSO_REALM:realm-name}/protocol/openid-connect/auth
+            token-uri: ${SSO_AUTH_SERVER:http://localhost:8585/auth}/realms/${SSO_REALM:realm-name}/protocol/openid-connect/token
+            
 keycloak:
   auth-server-url: ${SSO_AUTH_SERVER:http://localhost:8585/auth}
-  realm: ${SSO_REALM:realm}
-  resource: ${SSO_RESOURCE:todos}
+  realm: ${SSO_REALM:realm-name}
+  resource: ${SSO_RESOURCE:todos} 
   bearer-only: true
   principal-attribute: preferred_username
+  credentials:
+    secret: ${SSO_SECRET:b6ca1716-43a7-42a6-ab04-26aa5a853ae1}
   
 management:
   endpoints:
