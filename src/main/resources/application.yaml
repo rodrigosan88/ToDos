@@ -2,7 +2,7 @@ server:
   port: 8080
 spring:
   application:
-    name: Todos
+    name: ToDos
   profiles:
     active: default-security
   datasource:

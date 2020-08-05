@@ -9,12 +9,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.rodrigosan88.todos.base.AbstractEntity;
 import com.rodrigosan88.todos.models.enums.SeverityEnum;
-
-import lombok.Data;
 
 @Entity
 @Table(name = "todo")
@@ -39,6 +39,10 @@ public class Todo extends AbstractEntity<Long>{
 	@Enumerated(EnumType.STRING)
 	@Column(name = "severity", nullable = false)
 	private SeverityEnum severity;
+	
+	@ManyToOne
+	@JoinColumn(name = "owner")
+	private User owner;
 
 	public Todo() {
 		super();
@@ -94,6 +98,14 @@ public class Todo extends AbstractEntity<Long>{
 
 	public void setSeverity(SeverityEnum severity) {
 		this.severity = severity;
+	}
+	
+	public User getOwner() {
+		return owner;
+	}
+	
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 	
 }

@@ -6,21 +6,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rodrigosan88.todos.base.AbstractRestController;
 import com.rodrigosan88.todos.base.BaseService;
-import com.rodrigosan88.todos.models.entities.Todo;
-import com.rodrigosan88.todos.services.TodoService;
+import com.rodrigosan88.todos.models.entities.User;
+import com.rodrigosan88.todos.services.UserService;
 
 @RestController
-@RequestMapping(TodoRestController.PATH)
-public class TodoRestController extends AbstractRestController<Todo, Long>{
-	
-	public static final String PATH = "/api/v1/todos";
+@RequestMapping(UserRestController.PATH)
+public class UserRestController extends AbstractRestController<User, Long>{
 
+	public static final String PATH = "/api/v1/users";
+	
 	@Autowired
-	private TodoService todoService;
+	private UserService service;
 	
 	@Override
-	protected BaseService<Todo, Long> getService() {
-		return this.todoService;
+	protected BaseService<User, Long> getService() {
+		return service;
 	}
 
 }

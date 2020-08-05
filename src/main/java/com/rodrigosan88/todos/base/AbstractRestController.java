@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rodrigosan88.todos.exceptions.TodoBusinessException;
 
 public abstract class AbstractRestController <E extends AbstractEntity<I>, I>{
 
@@ -31,7 +32,12 @@ public abstract class AbstractRestController <E extends AbstractEntity<I>, I>{
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public E findResource(@PathVariable("id") I id) {
 
-        E resource = this.getService().findResource(id);
+        E resource = null;
+		try {
+			resource = this.getService().findResource(id);
+		} catch (TodoBusinessException e) {
+			e.printStackTrace();
+		}
 
         return resource;
     }
@@ -57,7 +63,11 @@ public abstract class AbstractRestController <E extends AbstractEntity<I>, I>{
     @Transactional(rollbackFor = Exception.class)
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public E createResource(@RequestBody E resource) {
-    	resource = this.getService().createResource(resource);
+    	try {
+			resource = this.getService().createResource(resource);
+		} catch (TodoBusinessException e) {
+			e.printStackTrace();
+		}
         return resource;
     }
 
@@ -67,16 +77,17 @@ public abstract class AbstractRestController <E extends AbstractEntity<I>, I>{
 
         E res = null;
 
-        E persistedResource = this.getService().findResource(id);
-        
-        if(persistedResource != null && resource.getId().equals(persistedResource.getId())) {
-            try {
-                res = this.getService().modifyResource(resource);
-            } catch (NoSuchElementException e) {
-            	e.printStackTrace();
-            }
+        E persistedResource;
 
-        }
+        try {
+			persistedResource = this.getService().findResource(id);
+			if(persistedResource != null && resource.getId().equals(persistedResource.getId())) {
+				res = this.getService().modifyResource(resource);
+			}
+		} catch (NoSuchElementException | TodoBusinessException e) {
+			e.printStackTrace();
+		}
+        
 
         return res;
     }
@@ -86,14 +97,14 @@ public abstract class AbstractRestController <E extends AbstractEntity<I>, I>{
     public E inactivateResource(@PathVariable("id") I id) {
         E res = null;
 
-        if(id != null) {
-            try {
-                E resource = this.getService().findResource(id);
-                resource.setActive(false);
-                res = this.getService().modifyResource(resource);
-            } catch (NoSuchElementException e) {
-                e.printStackTrace();
-            }
+        try {
+	        if(id != null) {
+	                E resource = this.getService().findResource(id);
+	                resource.setActive(false);
+	                res = this.getService().modifyResource(resource);
+	        }
+        } catch (NoSuchElementException | TodoBusinessException e) {
+        	e.printStackTrace();
         }
 
         return res;

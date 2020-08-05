@@ -17,6 +17,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<keycloak.version>9.0.2</keycloak.version>
+		<springdoc.version>1.4.3</springdoc.version>
 	</properties>
 
 	<dependencies>
@@ -48,9 +49,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+		    <groupId>org.springdoc</groupId>
+		    <artifactId>springdoc-openapi-ui</artifactId>
+		    <version>${springdoc.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.springdoc</groupId>
+		    <artifactId>springdoc-openapi-data-rest</artifactId>
+		    <version>${springdoc.version}</version>
 		</dependency>
 		
 		<dependency>
